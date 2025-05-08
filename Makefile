@@ -5,8 +5,8 @@
 	connect_registry_to_kind create_kind_cluster_with_registry
 
 run_website:
-	docker build -t explorecalifornia.com . && \
-		docker run -p 80:80 -d --name explorecalifornia.com --rm explorecalifornia.com
+	docker build -t kind-cluster-test ./website && \
+		docker run -p 80:80 -d --name kind-cluster-test --rm kind-cluster-test
 
 install_kind:
 	brew install kind || true;
@@ -16,7 +16,7 @@ install_kubectl:
 	brew install kubectl || true;
 
 create_kind_cluster_without_registry: create_docker_registry
-	kind create cluster --image=kindest/node:v1.21.12 --name explorecalifornia.com --config ./kind_config.yaml || true
+	kind create cluster --image=kindest/node:v1.21.12 --name kind-cluster-test --config ./kind_config.yaml || true
 	kubectl get nodes
 
 create_docker_registry:
@@ -39,7 +39,7 @@ create_kind_cluster_with_registry:
 
 
 delete_kind_cluster: delete_docker_registry
-	kind delete cluster --name explorecalifornia.com
+	kind delete cluster --name kind-cluster-test
 
 delete_docker_registry:
 	docker stop local-registry && docker rm local-registry
